@@ -41,10 +41,10 @@ if [ "$ARCH" = "i486" ]; then
   SLKCFLAGS="-O2 -march=i486 -mtune=i686"
   LIBDIRSUFFIX=""
 elif [ "$ARCH" = "i686" ]; then
-  SLKCFLAGS="-O2 -march=i686 -mtune=i686"
+  SLKCFLAGS="-O3 -march=i686 -mtune=i686"
   LIBDIRSUFFIX=""
 elif [ "$ARCH" = "x86_64" ]; then
-  SLKCFLAGS="-O2 -fPIC"
+  SLKCFLAGS="-O3 -fPIC"
   LIBDIRSUFFIX="64"
 else
   SLKCFLAGS="-O2"
@@ -91,7 +91,8 @@ mkdir -p build
 cd build
 CFLAGS="$SLKCFLAGS" \
 CXXFLAGS="$SLKCFLAGS" \
-cmake ../src \
+PATH=/opt/cmake-202x/bin:$PATH \
+  cmake ../src \
   -Dgnuinstall=OFF \
   -DSYSTEM_NAME=slackware-linux \
   -DSYSTEM_PROCESSOR=$ARCH \
@@ -100,9 +101,8 @@ cmake ../src \
   -DCMAKE_INSTALL_DOCDIR=$PREFIX/usr/doc/$PRGNAM-$VERSION \
   -Drpath=ON \
   -Dminuit2=ON \
-  -DCMAKE_CXX_STANDARD=17 \
+  -DCMAKE_CXX_STANDARD=14 \
   -Droot7=ON \
-  -DPYTHON_EXECUTABLE=/usr/bin/python3 \
   -Dfortran=ON \
   -Ddataframe=ON \
   -Dtmva=ON \
