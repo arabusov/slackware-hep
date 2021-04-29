@@ -1,0 +1,24 @@
+Davix aims to make the task of managing files over HTTP-based protocols
+simple. It is being developed by IT-ST at CERN, and while the project's
+purpose is its use on the CERN grid, the functionality offered is
+generic.
+
+HTTP is versatile enough to be fit for this purpose; PUT, MOVE and
+DELETE requests can be used for basic file manipulation (uploading,
+moving, and deleting a file, respectively).
+
+Some common file-management operations are not possible to do with
+plain HTTP, however, which is why the WebDAV extensions were developed,
+which davix supports. Davix also supports a plethora of authentication
+methods:
+
+    x509 user certificate
+    VOMS proxy
+    RFC proxy with VOMS extensions support
+    username / password
+    AWS S3 compatible services
+    Microsoft Azure compatible services
+
+Davix provides a shared library as well as a few command line tools.
+The library offers two sets of APIs, a file-oriented and a POSIX-like
+interface.

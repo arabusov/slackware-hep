@@ -1,0 +1,19 @@
+# HOW TO EDIT THIS FILE:
+# The "handy ruler" below makes it easier to edit a package description.
+# Line up the first '|' above the ':' following the base package name, and
+# the '|' on the right side marks the last column you can put a character in.
+# You must make exactly 11 lines for the formatting to be correct.  It's also
+# customary to leave one space after the ':' except on otherwise blank lines.
+
+     |-----handy-ruler------------------------------------------------------|
+davix: davix (Files-over-HTTP utils)
+davix:
+davix: Davix aims to make the task of managing files over HTTP-based
+davix: protocols simple. It is being developed by IT-ST at CERN, and while
+davix: the project's purpose is its use on the CERN grid, the functionality
+davix: offered is generic.
+davix: 
+davix:
+davix: 
+davix: Homepage: https://github.com/cern-fts/davix
+davix:
