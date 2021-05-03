@@ -12,9 +12,4 @@ seems impossible to stress all of them in this one script. Therefore
 the potential user is strongly advised to check the configure
 script.
 
-For mathmore support, run the SlackBuild script with MATHMORE=yes, and
-for QT support, run the SlackBuild script with QT=yes, for example
-
-  MATHMORE=yes ./root.SlackBuild
-
-Compilation takes quite a while.
+Optional dependencies: numpy and BLAS (needed for python TMVA)

@@ -1,0 +1,2 @@
+#!/bin/sh
+firejail --noprofile --allusers --net=none "$@"
