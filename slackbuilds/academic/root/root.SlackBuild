@@ -50,18 +50,17 @@ NJOBS=${NJOBS:-1}
 
 set -e
 
-# I'm not sure if it's going to work:
 rm -rf $PKG
 mkdir -p $TMP $PKG $OUTPUT
 cd $TMP
-rm -rf $PRGNAM-$VERSION
-tar xvf $CWD/$PRGNAM\_v$VERSION.source.tar.gz
-mv root-$VERSION src
-mkdir -p $PRGNAM-$VERSION
-mv src $PRGNAM-$VERSION
+#rm -rf $PRGNAM-$VERSION
+#tar xvf $CWD/$PRGNAM\_v$VERSION.source.tar.gz
+#mv root-$VERSION src
+#mkdir -p $PRGNAM-$VERSION
+#mv src $PRGNAM-$VERSION
 cd $PRGNAM-$VERSION
 
-#chown -R root:root .
+chown -R root:root .
 find -L . \
  \( -perm 777 -o -perm 775 -o -perm 750 -o -perm 711 -o -perm 555 \
   -o -perm 511 \) -exec chmod 755 {} \; -o \
@@ -70,7 +69,7 @@ find -L . \
 
 # prefix where to install stuff
 PREFIX=/opt/ROOT-${VERSION}
-mkdir build
+mkdir -p build
 cd build
 CFLAGS="$SLKCFLAGS" \
 CXXFLAGS="$SLKCFLAGS" \
@@ -88,6 +87,7 @@ cmake ../src \
   -Dbuiltin_openssl=OFF \
   -Dbuiltin_tbb=OFF \
   -Dbuiltin_vc=OFF \
+  -Dbuiltin_vdt=OFF \
   -Dbuiltin_veccore=OFF \
   -Dclad=OFF \
   -Dalien=OFF \
@@ -107,7 +107,6 @@ cmake ../src \
   -Dbuiltin_openui5=ON \
   -Dbuiltin_pcre=OFF \
   -Dbuiltin_unuran=OFF \
-  -Dbuiltin_vdt=ON \
   -Dbuiltin_xrootd=OFF \
   -Dbuiltin_xxhash=OFF \
   -Dbuiltin_zlib=OFF \
@@ -183,7 +182,7 @@ cmake ../src \
   -Dunuran=OFF \
   -During=OFF \
   -Dvc=OFF \
-  -Dvdt=ON \
+  -Dvdt=OFF \
   -Dveccore=OFF \
   -Dvmc=OFF \
   -Dwebgui=ON \
@@ -194,8 +193,8 @@ cmake ../src \
   -Dxproofd=OFF \
   -Dxrootd=OFF \
   -DCMAKE_BUILD_TYPE=Release ../src
-make -j${NJOBS}
-make install/strip DESTDIR=$PKG
+#make -j${NJOBS}
+make -j${NJOBS} install/strip DESTDIR=$PKG
 
 find $PKG | xargs file | grep -e "executable" -e "shared object" | grep ELF \
   | cut -f 1 -d : | xargs strip --strip-unneded 2> /dev/null || true
@@ -204,33 +203,48 @@ find $PKG$PREFIX/man -type f -exec gzip -9 {} \;
 
 mkdir -p $PKG/usr/doc/$PRGNAM-$VERSION
 # We are still in build directory
+# Copy documentation to system; also to ROOTSYS (ROOT expects it there)
 cp -a README/ README.md LICENSE LGPL2_1.txt ../src/CONTRIBUTING.md \
     $PKG/usr/doc/$PRGNAM-$VERSION
+find $PKG/usr/doc/$PRGNAM-$VERSION -type f -exec chmod 644 {} \;
 cp -a README/ LICENSE \
     $PKG$PREFIX
-find $PKG/usr/doc/$PRGNAM-$VERSION -type f -exec chmod 644 {} \;
+chmod -R 644 $PKG$PREFIX/README
+chmod -R 644 $PKG$PREFIX/LICENSE
 cat $CWD/$PRGNAM.SlackBuild > $PKG/usr/doc/$PRGNAM-$VERSION/$PRGNAM.SlackBuild
 
 # Install some profile.d scripts to use the right paths
 mkdir -p $PKG/etc/profile.d
+# Start with tcsh
 echo "setenv ROOTSYS $PREFIX"                   >  $PKG/etc/profile.d/root.csh
-echo "set path = ( \$path $PREFIX/bin )"       >> $PKG/etc/profile.d/root.csh
-echo "setenv MANPATH \${MANPATH}:$PREFIX/man"  >> $PKG/etc/profile.d/root.csh
-echo "setenv PYTHONPATH \$PYTHONPATH:$PREFIX/lib$LIBSUFFIX" >> \
-    $PKG/etc/profile.d/root.csh
-echo "ROOTSYS=$PREFIX"                  >  $PKG/etc/profile.d/root.sh
-echo "PATH=\$PATH:$PREFIX/bin"          >> $PKG/etc/profile.d/root.sh
-echo "MANPATH=\$MANPATH:$PREFIX/man"    >> $PKG/etc/profile.d/root.sh
-echo "PYTHONPATH=\$PYTHONPATH:$PREFIX/lib$LIBSUFFIX"          >> \
-    $PKG/etc/profile.d/root.sh
+echo "set path = ( \$path $PREFIX/bin )"        >> $PKG/etc/profile.d/root.csh
+echo "setenv MANPATH \${MANPATH}:$PREFIX/man"   >> $PKG/etc/profile.d/root.csh
+echo "if ( ! \$?PYTHONPATH ) then"              >> $PKG/etc/profile.d/root.csh
+echo "setenv PYTHONPATH $PREFIX/lib"            >> $PKG/etc/profile.d/root.csh
+echo "else"                                     >> $PKG/etc/profile.d/root.csh
+echo "if ( \"\$PYTHONPATH\" != \"\") then"     >> $PKG/etc/profile.d/root.csh
+echo "setenv PYTHONPATH \$PYTHONPATH:$PREFIX/lib">> $PKG/etc/profile.d/root.csh
+echo "else"                                     >> $PKG/etc/profile.d/root.csh
+echo "setenv PYTHONPATH $PREFIX/lib"            >> $PKG/etc/profile.d/root.csh
+echo "endif"                                    >> $PKG/etc/profile.d/root.csh
+echo "endif"                                    >> $PKG/etc/profile.d/root.csh
+# And bash
+echo "ROOTSYS=$PREFIX"                          >  $PKG/etc/profile.d/root.sh
+echo "PATH=\$PATH:$PREFIX/bin"                  >> $PKG/etc/profile.d/root.sh
+echo "MANPATH=\$MANPATH:$PREFIX/man"            >> $PKG/etc/profile.d/root.sh
+echo "if [ -z \"\${PYTHONPATH}\" ]; then"       >> $PKG/etc/profile.d/root.sh
+echo "    export PYTHONPATH=$PREFIX/lib"        >> $PKG/etc/profile.d/root.sh
+echo "else"                                     >> $PKG/etc/profile.d/root.sh
+echo "    export PYTHONPATH=\$PYTHONPATH:$PREFIX/lib" \
+                                                >> $PKG/etc/profile.d/root.sh
+echo "fi"                                       >> $PKG/etc/profile.d/root.sh
 chmod +x $PKG/etc/profile.d/root.*
+
+mkdir -p $PKG/etc/ld.so.conf.d
+echo "$PREFIX/lib"                      >  $PKG/etc/ld.so.conf.d/root.conf
 
 mkdir -p $PKG/install
 cat $CWD/slack-desc > $PKG/install/slack-desc
-sed \
-  -e "s|@LIBDIRSUFFIX@||" \
-  -e "s|@PREFIX@|$PREFIX|" \
-  $CWD/doinst.sh > $PKG/install/doinst.sh
 
 cd $PKG
 /sbin/makepkg -l y -c n $OUTPUT/$PRGNAM-$VERSION-$ARCH-$BUILD$TAG.${PKGTYPE:-tgz}
