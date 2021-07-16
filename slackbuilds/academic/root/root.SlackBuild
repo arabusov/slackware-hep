@@ -193,7 +193,7 @@ cmake ../src \
   -Dxproofd=OFF \
   -Dxrootd=OFF \
   -DCMAKE_BUILD_TYPE=Release ../src
-#make -j${NJOBS}
+make -j${NJOBS}
 make -j${NJOBS} install/strip DESTDIR=$PKG
 
 find $PKG | xargs file | grep -e "executable" -e "shared object" | grep ELF \
