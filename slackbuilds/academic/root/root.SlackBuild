@@ -18,7 +18,7 @@
 # Modified by the slackbuilds.org project
 
 PRGNAM=root
-VERSION=${VERSION:-6.24.00}
+VERSION=${VERSION:-6.24.02}
 BUILD=${BUILD:-1}
 TAG=${TAG:-_SBo}
 
@@ -53,11 +53,11 @@ set -e
 rm -rf $PKG
 mkdir -p $TMP $PKG $OUTPUT
 cd $TMP
-#rm -rf $PRGNAM-$VERSION
-#tar xvf $CWD/$PRGNAM\_v$VERSION.source.tar.gz
-#mv root-$VERSION src
-#mkdir -p $PRGNAM-$VERSION
-#mv src $PRGNAM-$VERSION
+rm -rf $PRGNAM-$VERSION
+tar xvf $CWD/$PRGNAM\_v$VERSION.source.tar.gz
+mv root-$VERSION src
+mkdir -p $PRGNAM-$VERSION
+mv src $PRGNAM-$VERSION
 cd $PRGNAM-$VERSION
 
 chown -R root:root .
