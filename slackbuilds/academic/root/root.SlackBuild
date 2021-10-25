@@ -18,7 +18,7 @@
 # Modified by the slackbuilds.org project
 
 PRGNAM=root
-VERSION=${VERSION:-6.24.02}
+VERSION=${VERSION:-6.24.06}
 BUILD=${BUILD:-1}
 TAG=${TAG:-_SBo}
 
