@@ -13,6 +13,6 @@ the potential user is strongly advised to check the cmake command
 arguments.
 
 Compilation takes quite a while, thus consider to build ROOT like that:
-# NJOBS=5 ./root.SlackBuild
+# MAKEFLAGS=-j5 ./root.SlackBuild
 
-Optional dependencies: numpy, BLAS (needed for python TMVA)
+NOTE: ROOT's python TMVA requires numpy3 built over blas.

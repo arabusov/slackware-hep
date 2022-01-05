@@ -8,12 +8,12 @@
     |-----handy-ruler------------------------------------------------------|
 root: root (data analysis framework)
 root:
-root: ROOT provides a set of frameworks with the functionality needed to 
-root: handle and analyze large amounts of data in an efficient way. It
-root: includes specialized storage methods such as histograms, curve
-root: fitting, function evaluation, minimization, graphics, visualization 
-root: classes; the C++ interpreter cling for fast prototyping; and powerful
-root: parallel processing support.
+root: ROOT is a data analysis framework used mostly, but not limited to,
+root: high energy physics. It was written in C++ by the techs at CERN to
+root: explore the benefits of object oriented programming in physics data
+root: analysis. It consists of libraries, CINT or cling interpreter for
+root: C/C++, plotting interface and powerful parellel processing support.
+root: It is the preferred choice in many laboratories.
 root:
-root: Homepage: https://root.cern
+root: Homepage: http://root.cern.ch/drupal/
 root:
