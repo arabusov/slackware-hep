@@ -1,8 +1,9 @@
-#!/bin/sh
+#!/bin/bash
 
 # Slackware build script for ROOT
 
 # written by Jože Zobec <jozze.zepl@gmail.com>
+# modified by ponce and arabusov
 
 # THIS SOFTWARE IS PROVIDED BY THE AUTHOR ``AS IS'' AND ANY
 # EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED

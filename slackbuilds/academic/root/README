@@ -1,9 +1,9 @@
 ROOT - A data analysis framework.
 
-ROOT provides a set of frameworks with the functionality needed to 
+ROOT provides a set of frameworks with the functionality needed to
 handle and analyze large amounts of data in an efficient way. It
 includes specialized storage methods such as histograms, curve
-fitting, function evaluation, minimization, graphics, visualization 
+fitting, function evaluation, minimization, graphics, visualization
 classes; the C++ interpreter cling for fast prototyping; and powerful
 parallel processing support.
 
